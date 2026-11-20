@@ -1,0 +1,970 @@
+/* ---------- 1. DESIGN TOKENS ---------- */
+:root {
+  --paper: #F1E8D2;        /* page background: aged ledger paper */
+  --paper-dark: #E6D6AE;   /* card/stub surface: slightly deeper paper */
+  --paper-darker: #D9C696; /* table headers, pressed states */
+  --ink: #2B2116;          /* primary text: iron-gall ink brown-black */
+  --ink-soft: #6B5A42;     /* secondary/muted text */
+  --ink-faint: #9C8C6E;    /* placeholder-level text */
+
+  /* wheat gold — the crop itself, primary accent */
+  --wheat: #BE8A26;
+  --wheat-deep: #8C6417;
+  --wheat-pale: #EFDCA3;
+
+  /* stamp red — ink-stamp accent for alerts/urgency */
+  --stamp-red: #A13A2B;
+  --stamp-red-pale: #E9D0C6;
+
+  /* slate — chalkboard / officer "desk" surfaces */
+  --slate: #33453C;
+  --slate-deep: #202E27;
+  --slate-pale: #CBD8CD;
+
+  /* structural lines */
+  --rule: #C2AC79;
+  --rule-soft: #DBC99A;
+
+  --shadow-ink: 3px 3px 0 rgba(43, 33, 22, 0.16);
+  --shadow-ink-sm: 2px 2px 0 rgba(43, 33, 22, 0.14);
+  --radius-stub: 3px;
+
+  --space-xs: 6px; --space-sm: 10px; --space-md: 16px; --space-lg: 24px; --space-xl: 36px;
+}
+
+/* ---------- 2. RESET & BASE ---------- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 0 88px 0;
+  background-color: var(--paper);
+  /* faint ruled-paper texture across the whole page */
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(43, 33, 22, 0.035) 0px,
+    rgba(43, 33, 22, 0.035) 1px,
+    transparent 1px,
+    transparent 30px
+  );
+  color: var(--ink);
+  font-family: "Hind", "Noto Sans", -apple-system, sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Rajdhani", "Hind", sans-serif;
+  font-weight: 700;
+}
+
+p { margin: 0; }
+a { text-decoration: none; color: inherit; }
+
+hr.divider {
+  border: none;
+  border-top: 1px dashed var(--rule);
+  margin: var(--space-lg) 0;
+}
+
+/* ---------- 3. SCREEN / SECTION LAYOUT ---------- */
+.screen {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md);
+  border-bottom: 1px dashed var(--rule);
+}
+.screen:last-of-type { border-bottom: none; }
+
+.section-title {
+  font-size: 23px;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--ink);
+  display: inline-block;
+}
+.section-title.small {
+  font-size: 18px;
+  margin-top: var(--space-lg);
+  border-bottom-width: 1px;
+}
+.section-subtitle {
+  color: var(--ink-soft);
+  margin-bottom: var(--space-md);
+  font-size: 15px;
+}
+
+/* ---------- 4. CARD (base "paper stock") ---------- */
+.card {
+  background: var(--paper-dark);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-stub);
+  box-shadow: var(--shadow-ink);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+/* ---------- 5. BUTTONS ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+  border-radius: 0;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 14px 26px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: var(--space-sm);
+  transition: background 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--wheat);
+  color: var(--ink);
+}
+.btn-primary:hover { background: var(--wheat-deep); color: var(--paper); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+}
+.btn-secondary:hover { background: var(--ink); color: var(--paper); }
+
+.btn-large { padding: 16px 26px; font-size: 19px; }
+.btn-small {
+  width: auto;
+  padding: 8px 18px;
+  font-size: 15px;
+  margin-top: 0;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+}
+
+/* ---------- 6. DEMO LABELS & STATUS STAMPS ---------- */
+.demo-label {
+  display: inline-block;
+  background: var(--stamp-red-pale);
+  color: var(--stamp-red);
+  border: 1px solid var(--stamp-red);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 2px;
+  margin-bottom: var(--space-sm);
+}
+.demo-label-light {
+  background: rgba(241, 232, 210, 0.16);
+  color: var(--paper);
+  border-color: rgba(241, 232, 210, 0.5);
+}
+
+.disclaimer-inline {
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin-top: var(--space-sm);
+}
+
+/* Status badges are styled as rubber ink-stamps: a double
+   ring (via layered box-shadow) and a slight rotation, instead
+   of the generic solid-fill pill used everywhere else. */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 2px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+
+  box-shadow: 0 0 0 2px var(--paper-dark), 0 0 0 3px currentColor;
+}
+
+.badge-open     { color: var(--slate-deep); background: var(--slate-pale); }
+.badge-moderate { color: var(--wheat-deep); background: var(--wheat-pale); }
+.badge-medium   { color: var(--ink-soft);   background: var(--paper-darker); }
+.badge-progress { color: var(--stamp-red);  background: var(--stamp-red-pale); }
+.badge-alert    { color: var(--paper);      background: var(--stamp-red); }
+
+/*SECTION 1: WELCOME / ONBOARDING*/
+.welcome-screen {
+  border-bottom: none;
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-xl);
+}
+
+.welcome-inner { max-width: 420px; margin: 0 auto; }
+
+.logo-badge { font-size: 40px; margin-bottom: var(--space-xs); }
+
+.app-title {
+  font-size: 38px;
+  letter-spacing: 0.01em;
+  border-bottom: 3px solid var(--wheat);
+  display: inline-block;
+  padding-bottom: 4px;
+  margin-bottom: var(--space-xs);
+}
+
+.tagline {
+  color: var(--ink-soft);
+  font-size: 18px;
+  margin-bottom: var(--space-lg);
+  font-style: italic;
+}
+
+.benefit-list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-lg);
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md) 2px;
+  border-bottom: 1px dashed var(--rule);
+  border-left: 3px solid var(--wheat);
+  padding-left: var(--space-sm);
+}
+.benefit-item:last-child { border-bottom: none; }
+
+.benefit-icon { font-size: 24px; }
+.benefit-title { font-weight: 700; margin-bottom: 2px; font-family: "Rajdhani", sans-serif; font-size: 17px; }
+.benefit-text { color: var(--ink-soft); font-size: 15px; }
+
+/*  SECTION 2: LOGIN / REGISTRATION */
+.form-card { margin-top: var(--space-md); }
+
+.stack-form { display: flex; flex-direction: column; gap: var(--space-xs); }
+
+.field-label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: var(--space-sm);
+  font-family: "Rajdhani", sans-serif;
+  color: var(--ink-soft);
+}
+
+.field-input {
+  border: none;
+  border-bottom: 2px solid var(--rule);
+  border-radius: 0;
+  padding: 10px 4px;
+  font-size: 16px;
+  background: transparent;
+  color: var(--ink);
+  font-family: "Hind", sans-serif;
+}
+.field-input:focus { border-bottom-color: var(--wheat-deep); outline: none; }
+
+.field-input.field-invalid { border-bottom-color: var(--stamp-red); }
+.field-error { color: var(--stamp-red); font-size: 13px; margin-top: 4px; }
+
+.role-select {
+  border: none;
+  padding: 0;
+  margin: var(--space-sm) 0 0 0;
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.role-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 2px solid var(--rule);
+  border-radius: var(--radius-stub);
+  padding: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.role-option:has(input:checked) {
+  border-color: var(--ink);
+  background: var(--wheat-pale);
+}
+
+/* SECTION 3: FARMER HOME DASHBOARD — ledger rows, not tiles*/
+.greeting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.greeting-text { color: var(--ink-soft); font-size: 14px; }
+.greeting-name { font-size: 26px; }
+
+.sync-pill {
+  background: var(--slate-pale);
+  color: var(--slate-deep);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-stub);
+  font-family: "Rajdhani", sans-serif;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md) var(--space-lg);
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-bottom: 1px dashed var(--rule);
+  padding-bottom: 6px;
+}
+
+.summary-label { color: var(--ink-soft); font-size: 13px; font-family: "Rajdhani", sans-serif; }
+.summary-value { font-weight: 600; }
+.token-value {
+  color: var(--stamp-red);
+  font-size: 19px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.quick-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+
+.stat-card { text-align: center; padding: var(--space-sm); }
+.stat-label { display: block; color: var(--ink-soft); font-size: 12px; margin-bottom: 4px; font-family: "Rajdhani", sans-serif; }
+.stat-value { font-size: 19px; font-weight: 700; font-family: "Rajdhani", sans-serif; }
+
+.price-strip { display: flex; flex-direction: column; gap: 4px; }
+.price-strip strong { font-size: 21px; color: var(--wheat-deep); font-family: "Rajdhani", sans-serif; }
+
+.status-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); }
+.status-mini-card { display: flex; flex-direction: column; gap: 6px; }
+.status-mini-title { font-size: 13px; color: var(--ink-soft); }
+
+/*  SECTION 4: "SHOULD I GO NOW?" — chalkboard notice board */
+.go-now-card {
+  background: var(--slate-deep);
+  color: var(--paper);
+  border: none;
+  background-image: repeating-linear-gradient(
+    100deg,
+    rgba(241, 232, 210, 0.02) 0px,
+    rgba(241, 232, 210, 0.02) 2px,
+    transparent 2px,
+    transparent 40px
+  );
+}
+
+.go-now-card .status-badge {
+  background: rgba(241, 232, 210, 0.12);
+  color: var(--paper);
+  box-shadow: 0 0 0 2px var(--slate-deep), 0 0 0 3px var(--paper);
+}
+
+.go-now-main {
+  font-size: 30px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  margin: var(--space-xs) 0 var(--space-md) 0;
+  text-shadow: 0 0 10px rgba(241, 232, 210, 0.25);
+}
+
+.go-now-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.go-now-item { display: flex; flex-direction: column; gap: 2px; }
+.go-now-label { font-size: 12px; opacity: 0.75; font-family: "Rajdhani", sans-serif; }
+.go-now-value { font-weight: 700; font-size: 17px; font-family: "Rajdhani", sans-serif; }
+
+.go-now-explain {
+  border-top: 1px dashed rgba(241, 232, 210, 0.35);
+  padding-top: var(--space-sm);
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.92;
+}
+
+/*  SECTION 5: TOKEN — a torn paper stub */
+.token-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+
+}
+
+.token-details { display: flex; flex-direction: column; gap: 8px; }
+
+.token-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dotted var(--rule);
+  padding-bottom: 6px;
+  font-size: 15px;
+}
+.token-row span { color: var(--ink-soft); }
+
+.qr-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  border-top: 2px dashed var(--rule);
+  padding-top: var(--space-md);
+}
+
+.qr-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  font-size: 38px;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.qr-caption { font-size: 12px; color: var(--ink-soft); font-weight: 600; font-family: "Rajdhani", sans-serif; }
+
+/*  SECTION 6: LIVE QUEUE — grain-fill gauge*/
+.queue-top-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.queue-token-box {
+  background: var(--paper);
+  border: 2px solid var(--rule);
+  border-radius: var(--radius-stub);
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+.queue-token-box-you { background: var(--wheat-pale); border-color: var(--ink); }
+
+.queue-token-label { font-size: 12px; color: var(--ink-soft); font-family: "Rajdhani", sans-serif; }
+.queue-token-num { font-size: 21px; font-weight: 700; color: var(--ink); font-family: "Rajdhani", sans-serif; }
+
+.queue-progress-wrap { margin-bottom: var(--space-md); }
+
+.queue-progress-track {
+  background: var(--paper-darker);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.queue-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--wheat-deep), var(--wheat));
+  background-image:
+    repeating-linear-gradient(45deg, rgba(43,33,22,0.08) 0, rgba(43,33,22,0.08) 3px, transparent 3px, transparent 8px),
+    linear-gradient(90deg, var(--wheat-deep), var(--wheat));
+}
+
+.queue-progress-caption { font-size: 13px; color: var(--ink-soft); margin-top: 6px; }
+
+.queue-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+.queue-meta-item { display: flex; flex-direction: column; gap: 4px; }
+.queue-meta-label { font-size: 13px; color: var(--ink-soft); font-family: "Rajdhani", sans-serif; }
+.queue-meta-value { font-weight: 700; font-family: "Rajdhani", sans-serif; }
+
+/*  SECTION 7: CROP PRICE / MSP — a genuine ledger table */
+.table-scroll-wrap { overflow-x: auto; padding: 0; }
+
+.price-table { width: 100%; border-collapse: collapse; min-width: 520px; }
+
+.price-table th, .price-table td {
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+
+.price-table th {
+  color: var(--ink-soft);
+  font-weight: 700;
+  background: var(--paper-darker);
+  font-family: "Rajdhani", sans-serif;
+  letter-spacing: 0.02em;
+}
+.price-table tr:last-child td { border-bottom: none; }
+
+.calc-card { display: flex; flex-direction: column; gap: var(--space-xs); }
+.calc-row { display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm); }
+.calc-row strong { font-family: "Rajdhani", sans-serif; font-size: 19px; color: var(--wheat-deep); }
+
+/*  SECTION 8: VEHICLE BOOKING — a small stack of ticket stubs */
+.vehicle-list { display: flex; flex-direction: column; gap: var(--space-md); }
+
+.vehicle-card { display: flex; flex-direction: column; gap: var(--space-sm); }
+
+
+.vehicle-head { display: flex; align-items: center; gap: var(--space-sm); }
+.vehicle-icon { font-size: 30px; }
+.vehicle-name { font-weight: 700; font-size: 18px; font-family: "Rajdhani", sans-serif; }
+.vehicle-rating { font-size: 13px; color: var(--ink-soft); }
+
+.vehicle-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  border-top: 1px dashed var(--rule);
+  padding-top: var(--space-sm);
+}
+
+/*  SECTION 9: VEHICLE TRACKING*/
+.tracking-card { display: flex; flex-direction: column; gap: var(--space-md); }
+
+.tracking-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); }
+
+.map-placeholder {
+  background: var(--paper);
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--paper-darker) 0px, var(--paper-darker) 1px,
+    transparent 1px, transparent 12px
+  );
+  border: 2px dashed var(--rule);
+  border-radius: var(--radius-stub);
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 600;
+  color: var(--ink-soft);
+  font-size: 14px;
+  padding: var(--space-sm);
+  font-family: "Rajdhani", sans-serif;
+}
+
+.timeline-horizontal { display: flex; overflow-x: auto; gap: var(--space-md); padding-bottom: 4px; }
+
+.timeline-h-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 84px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-faint);
+  font-family: "Rajdhani", sans-serif;
+}
+
+.timeline-h-step .timeline-dot {
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--paper-darker);
+  border: 2px solid var(--rule);
+  display: block;
+}
+.timeline-h-step.is-done .timeline-dot { background: var(--wheat); border-color: var(--wheat-deep); }
+.timeline-h-step.is-active .timeline-dot {
+  background: var(--stamp-red);
+  border-color: var(--stamp-red);
+  box-shadow: 0 0 0 3px var(--stamp-red-pale);
+}
+.timeline-h-step.is-done, .timeline-h-step.is-active { color: var(--ink); font-weight: 600; }
+
+/* SECTION 10: PROCUREMENT LIFECYCLE — stitched paper trail*/
+.timeline-vertical { display: flex; flex-direction: column; }
+
+.timeline-v-step {
+  display: flex;
+  gap: var(--space-md);
+  padding-bottom: var(--space-lg);
+  position: relative;
+}
+
+.timeline-v-step::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 20px;
+  bottom: 0;
+  width: 0;
+  border-left: 2px dashed var(--rule);
+}
+.timeline-v-step:last-child::before { display: none; }
+
+.timeline-v-step .timeline-dot {
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--paper-darker);
+  border: 2px solid var(--rule);
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+.timeline-v-step.is-done .timeline-dot { background: var(--wheat); border-color: var(--wheat-deep); }
+.timeline-v-step.is-active .timeline-dot {
+  background: var(--stamp-red);
+  border-color: var(--stamp-red);
+  box-shadow: 0 0 0 3px var(--stamp-red-pale);
+}
+
+.timeline-v-title { font-weight: 700; font-family: "Rajdhani", sans-serif; font-size: 17px; }
+.timeline-v-time { color: var(--ink-soft); font-size: 13px; }
+
+.quality-note {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--stamp-red);
+  background: var(--stamp-red-pale);
+  border-radius: 2px;
+  padding: 6px 10px;
+  display: inline-block;
+}
+
+/*  SECTION 11: PAYMENT STATUS */
+.payment-card { display: flex; flex-direction: column; gap: var(--space-md); }
+
+.payment-amount-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  background: var(--wheat-pale);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-stub);
+  padding: var(--space-md);
+}
+
+.payment-amount { font-size: 25px; font-weight: 700; color: var(--wheat-deep); font-family: "Rajdhani", sans-serif; }
+
+/*  SECTION 12: SMART NOTIFICATIONS */
+.notification-list { display: flex; flex-direction: column; gap: var(--space-sm); }
+
+.notification-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  border-left: 4px solid var(--wheat);
+}
+
+.notification-icon { font-size: 22px; }
+.notification-title { font-weight: 700; margin-bottom: 2px; font-family: "Rajdhani", sans-serif; }
+.notification-text { color: var(--ink-soft); font-size: 14px; }
+
+.notification-vehicle      { border-left-color: var(--slate); }
+.notification-procurement  { border-left-color: var(--stamp-red); }
+.notification-payment      { border-left-color: var(--wheat-deep); }
+
+.notification-dismiss {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--ink-faint);
+  font-size: 16px;
+  line-height: 1;
+  padding: 4px 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.notification-dismiss:hover { color: var(--ink); }
+.notification-card.is-dismissed {
+  opacity: 0;
+
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/*  SECTION 13: PROFILE & ACCESSIBILITY*/
+.profile-head { display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md); }
+
+.profile-avatar {
+  font-size: 36px;
+  background: var(--wheat-pale);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  width: 58px; height: 58px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.profile-name { font-weight: 700; font-size: 18px; font-family: "Rajdhani", sans-serif; }
+.profile-sub { color: var(--ink-soft); font-size: 14px; }
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px dashed var(--rule);
+}
+
+.toggle-placeholder {
+  width: 46px; height: 26px;
+  background: var(--paper-darker);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 2px;
+  display: flex;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.toggle-placeholder.is-on { background: var(--wheat); justify-content: flex-end; }
+
+.toggle-knob {
+  width: 20px; height: 20px;
+  background: var(--paper);
+  border: 1px solid var(--ink-faint);
+  border-radius: 50%;
+}
+
+.sync-card {
+  margin-top: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  background: var(--paper);
+  border: 1px dashed var(--rule);
+  border-radius: var(--radius-stub);
+  padding: var(--space-sm) var(--space-md);
+}
+
+/* SECTION 14 & 15: OFFICER SCREENS — the duty desk
+   Darker slate register to visually separate officer mode
+   from the farmer's paper-ledger mode. */
+.officer-screen { max-width: 900px; }
+
+.officer-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.officer-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--slate);
+  color: var(--paper);
+  border: none;
+  box-shadow: var(--shadow-ink-sm);
+}
+.officer-stat-card .summary-label { color: var(--slate-pale); }
+
+.officer-stat-value { font-size: 27px; font-weight: 700; color: var(--wheat-pale); font-family: "Rajdhani", sans-serif; }
+
+.congestion-card { display: flex; flex-direction: column; gap: 6px; }
+
+.officer-screen .price-table th { background: var(--slate); color: var(--paper); }
+
+/*  BOTTOM NAVIGATION — a row of gate signboards */
+.bottom-nav {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: var(--slate-deep);
+  border-top: 3px solid var(--wheat);
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 4px calc(8px + env(safe-area-inset-bottom, 0));
+  z-index: 10;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--slate-pale);
+  padding: 4px 6px;
+  min-width: 56px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.bottom-nav-item span:first-child { font-size: 20px; }
+
+.bottom-nav-item.active { color: var(--wheat-pale); }
+.bottom-nav-item.active span:first-child { transform: scale(1.1); }
+
+/* ACCESSIBILITY MODES (toggled by script.js on <body>) */
+body.large-text { font-size: 19px; }
+
+body.large-text .app-title,
+body.large-text .section-title,
+body.large-text .go-now-main,
+body.large-text .greeting-name,
+body.large-text .stat-value,
+body.large-text .summary-value,
+body.large-text .queue-meta-value,
+body.large-text .officer-stat-value,
+body.large-text .token-value {
+  font-size: 1.2em;
+}
+
+body.high-contrast {
+  --paper: #FFFFFF;
+  --paper-dark: #FFFFFF;
+  --ink: #000000;
+  --ink-soft: #262626;
+  --rule: #000000;
+  --wheat: #6B4E00;
+  --wheat-deep: #4A3600;
+  --wheat-pale: #F2E4BE;
+}
+body.high-contrast .card,
+body.high-contrast .benefit-item,
+body.high-contrast .queue-token-box {
+  border-width: 2px;
+  box-shadow: none;
+}
+
+/* TOAST NOTIFICATIONS */
+#toast-container {
+  position: fixed;
+  left: 50%;
+  bottom: 96px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 50;
+  width: calc(100% - 32px);
+  max-width: 420px;
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--slate-deep);
+  color: var(--paper);
+  padding: 12px 16px;
+  border-radius: var(--radius-stub);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: var(--shadow-ink);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  text-align: center;
+  font-family: "Rajdhani", sans-serif;
+}
+.toast.is-visible { opacity: 1; transform: translateY(0); }
+
+/* ---------- 7. RESPONSIVE / DESKTOP LAYOUT ---------- */
+@media (min-width: 640px) {
+  .screen { max-width: 640px; padding: var(--space-xl) var(--space-lg); }
+  .welcome-inner { max-width: 480px; }
+  .officer-screen { max-width: 920px; }
+  .officer-stat-grid { grid-template-columns: repeat(3, 1fr); }
+  .vehicle-list { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+}
+
+@media (min-width: 900px) {
+  .officer-stat-grid { grid-template-columns: repeat(6, 1fr); }
+  .officer-screen .table-scroll-wrap { overflow-x: visible; }
+}
+
+/* ---------- 8. ACCESSIBILITY HELPERS ---------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--stamp-red);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; }
+}
+
+/* ==========================================================================
+   Supplemental widget styles for the language/voice features.
+   NOTE: large-text and high-contrast modes are already handled by
+   style.css (body.large-text / body.high-contrast) — nothing here
+   duplicates those. This file only styles the new speaker and mic buttons,
+   built from your existing design tokens (--wheat, --ink, --slate-deep, etc.)
+   ========================================================================== */
+
+.speak-btn {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 0.75em;
+  cursor: pointer;
+  vertical-align: middle;
+  margin-left: 6px;
+  padding: 2px 4px;
+}
+.speak-btn:hover { color: var(--wheat-deep); }
+
+.voice-cmd-btn {
+  position: fixed;
+  bottom: calc(88px + env(safe-area-inset-bottom, 0));
+  right: 18px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: var(--wheat);
+  color: var(--ink);
+  font-size: 22px;
+  box-shadow: var(--shadow-ink);
+  z-index: 20;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.voice-cmd-btn:hover { background: var(--wheat-deep); color: var(--paper); }
+
+.voice-cmd-btn.listening {
+  background: var(--stamp-red);
+  color: var(--paper);
+  border-color: var(--stamp-red);
+  animation: voice-pulse 1s infinite;
+}
+
+@keyframes voice-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(161, 58, 43, 0.55); }
+  70%  { box-shadow: 0 0 0 14px rgba(161, 58, 43, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(161, 58, 43, 0); }
+}
+
+.voice-cmd-status {
+  position: fixed;
+  bottom: calc(150px + env(safe-area-inset-bottom, 0));
+  right: 18px;
+  max-width: 220px;
+  background: var(--slate-deep);
+  color: var(--paper);
+  padding: 8px 12px;
+  border-radius: var(--radius-stub);
+  font-size: 13px;
+  font-family: "Rajdhani", sans-serif;
+  box-shadow: var(--shadow-ink-sm);
+  z-index: 20;
+}

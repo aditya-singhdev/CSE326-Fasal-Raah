@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FasalRaah – Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<section class="screen welcome-screen" style="max-width: 460px; margin: 40px auto;">
+  <div class="welcome-inner" style="text-align: center;">
+    <div class="logo-badge" style="font-size: 50px;">🌾</div>
+    <h1 class="app-title">FasalRaah</h1>
+    <p class="tagline">Know when to go, before you go.</p>
+  </div>
+
+  <div class="card form-card">
+    <h2 class="section-title">Select Portal</h2>
+    <p class="section-subtitle">Choose your role to access your dedicated dashboard</p>
+
+    <form class="stack-form" id="login-form">
+      <fieldset class="role-select">
+        <label class="role-option" style="cursor: pointer;">
+          <input type="radio" name="role" value="farmer" checked />
+          <span>🧑‍🌾 Farmer Portal</span>
+        </label>
+        <label class="role-option" style="cursor: pointer;">
+          <input type="radio" name="role" value="officer" />
+          <span>🧑‍💼 Mandi Officer</span>
+        </label>
+      </fieldset>
+
+      <label class="field-label" for="mobile-number">Registered Mobile Number</label>
+      <input class="field-input" type="tel" id="mobile-number" value="9876543210" maxlength="10" />
+
+      <button type="submit" class="btn btn-primary btn-large" style="margin-top: 20px;">Open Dashboard &rarr;</button>
+    </form>
+
+    <div style="margin-top: 20px; font-size: 13px; color: #666; text-align: center;">
+      
+    </div>
+  </div>
+</section>
+
+<script>
+  const mobileInput = document.getElementById('mobile-number');
+  const roleRadios = document.querySelectorAll('input[name="role"]');
+  const form = document.getElementById('login-form');
+
+  // Auto-switch demo numbers when selecting role
+  roleRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (radio.value === 'officer') {
+        mobileInput.value = '9814011223';
+      } else {
+        mobileInput.value = '9876543210';
+      }
+    });
+  });
+
+  // Navigate to separate pages
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const role = document.querySelector('input[name="role"]:checked').value;
+    if (role === 'officer') {
+      window.location.href = 'officer.html';
+    } else {
+      window.location.href = 'farmer.html';
+    }
+  });
+</script>
+
+</body>
+</html>
